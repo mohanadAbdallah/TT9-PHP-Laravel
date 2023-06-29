@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -17,10 +18,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Classroom::class);
     }
-
-    public function classWorks(): BelongsToMany
+    public function classworks(): BelongsToMany
     {
         return $this->belongsToMany(ClassWork::class);
+    }
+
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(Submission::class);
     }
     /**
      * The attributes that are mass assignable.
