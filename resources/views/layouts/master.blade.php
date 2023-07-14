@@ -2,11 +2,26 @@
 <html lang="en">
 @include('partials.header')
 <body>
-@include('partials.navbar')
 
-@yield('content')
 
-@include('partials.footer')
+
+<div class="page-content">
+    <!-- Main sidebar -->
+    <!-- /main sidebar -->
+    <!-- Main content -->
+    <div class="content-wrapper">
+        <div class="content">
+            @include('partials.navbar')
+            @yield('content')
+        </div>
+        <!-- Footer -->
+    @include('partials.footer')
+    <!-- /footer -->
+    </div>
+</div>
+
 </body>
 
 </html>
+
+

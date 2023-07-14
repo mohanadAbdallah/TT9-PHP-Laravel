@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClassroomsController;
+use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,3 +20,5 @@ Route::get('/', function () {
 });
 
 Route::resource('classrooms',ClassroomsController::class);
+Route::resource('topics',TopicController::class);
+
