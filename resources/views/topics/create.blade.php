@@ -1,13 +1,9 @@
 @extends('layouts.master')
 @section('content')
     <div class="container" style="padding: 20px;">
-        @if($errors->any())
-            @foreach($errors->all() as $error)
-                <div class="alert alert-danger">
-                    {{$error}}
-                </div>
-            @endforeach
-        @endif
+
+        <x-validation/>
+
         <h1 class="mt-4 mb-5">Create Topic</h1>
 
         <form action="{{ route('topics.store')}}" method="post" enctype="multipart/form-data">

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ClassroomRequest extends FormRequest
 {
@@ -22,10 +23,24 @@ class ClassroomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>['required'],
-            'section'=>['required'],
-            'subject'=>['required'],
-            'room'=>['required'],
+            'name' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) {
+                if ($value == 'admin') {
+                    return $fail('This :attribute value is forbidden!');
+                }
+
+            }],
+            'section'=>['required','string','max:255'],
+            'subject'=>['nullable','string','max:255'],
+            'room'=>['nullable','string','max:255'],
+            'cover_image'=>[
+                'nullable',
+                'image',
+                'max:1024',
+                Rule::dimensions([
+                    'min_width'=>600,
+                    'min_height'=>250,
+                ]),
+                ]
         ];
     }
 }

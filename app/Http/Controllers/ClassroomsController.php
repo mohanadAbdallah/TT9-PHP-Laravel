@@ -14,33 +14,42 @@ class ClassroomsController extends Controller
     public function index(): View
     {
         //return Collection of data
-        $classrooms = Classroom::orderBy('name', 'DESC')->get();
+        $classrooms = Classroom::status()
+            ->recent()
+            ->get();
+
         return view('classrooms.index', compact('classrooms'));
 
     }
 
     public function create(): View
     {
-        return view('classrooms.create');
+        return view('classrooms.create',[
+            'classroom'=>new Classroom()
+        ]);
     }
 
     public function store(ClassroomRequest $request): RedirectResponse
     {
+
         $validatedData = $request->validated();
-        $validatedData['code'] = Str::random(8);
+
         if ($request->hasFile('cover_image')){
-            //return object from UploadedFile
+
             $file = $request->file('cover_image');
-            $path = $file->store('/','public');
+            $path = $file->store('/images','public');
+
             $validatedData['cover_image_path'] = $path;
         }
         Classroom::create($validatedData);
 
-        return redirect()->route('classrooms.index')->with('status','Class  room Created Successfully');
+        return redirect()->route('classrooms.index')
+            ->with('success','Class  room Created Successfully');
     }
 
-    public function show(Classroom $classroom): View
+    public function show($id): View
     {
+        $classroom = Classroom::withTrashed()->findOrFail($id);
         return view('classrooms.show', compact('classroom'));
     }
 
@@ -56,15 +65,46 @@ class ClassroomsController extends Controller
         return redirect()->route('classrooms.index');
     }
 
-    public function destroy(Classroom $classroom): RedirectResponse
+    public function destroy(Classroom $classroom)
     {
-        $image_path = public_path("storage/".$classroom->cover_image_path);
+//        $image_path = public_path("storage/".$classroom->cover_image_path);
+//
+//        if(file_exists($image_path)){
+//            unlink($image_path);
+//        }
+        $deleted = $classroom->delete();
 
-        if(file_exists($image_path)){
-            unlink($image_path);
-        }
-        $classroom->delete();
-        return redirect()->route('classrooms.index')
-            ->with('status','Classroom deleted');
+        return response()->json(
+                ['message'=>$deleted ? "Classroom Deleted" : "Failed To Delete Classroom"],
+                $deleted ? 201 : 400);
+    }
+
+    public function trashed(): View
+    {
+
+        $classrooms = Classroom::onlyTrashed()
+            ->latest('deleted_at')
+            ->get();
+
+        return view('classrooms.trashed',compact('classrooms'));
+    }
+
+    public function restore($id): RedirectResponse
+    {
+        $classroom = Classroom::onlyTrashed()->findOrFail($id);
+        $classroom->restore();
+
+        return redirect()->route('classrooms.index')->with('status',"Classroom {{ $classroom->name }} Restored Successfully");
+    }
+
+    public function forceDelete($id): RedirectResponse
+    {
+        $classroom = Classroom::withTrashed()->findOrFail($id);
+        $classroom->forceDelete();
+
+
+        return redirect()
+            ->route('classrooms.index')
+            ->with('status',"Classroom {{$classroom->name}} Permanently Deleted");
     }
 }

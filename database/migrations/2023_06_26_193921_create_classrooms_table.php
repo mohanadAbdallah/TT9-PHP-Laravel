@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('room')->nullable();
             $table->string('cover_image_path')->nullable();
             $table->string('theme')->nullable();
-            $table->enum('status',['active','archived'])->default('active');
+            $table->enum('status',['active','archived','deleted'])->default('active');
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

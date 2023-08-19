@@ -9,13 +9,13 @@
             <a href="{{route('topics.create')}}" class="btn btn-primary">Add Topic</a>
         </div>
 
+        <div class="mb-5">
+            <a href="{{route('topics.trashed')}}" class="btn btn-success">Trashed</a>
+        </div>
 
-        @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
 
+
+        <x-alert/>
 
         <div class="row">
             @foreach($topics as $topic)
