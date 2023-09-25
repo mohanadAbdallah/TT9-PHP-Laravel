@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Classroom;
 use App\Models\ClassWork;
+use App\Notifications\NewClassroomNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -53,6 +55,8 @@ class ClassworkController extends Controller
         $validatedData['id'] = Auth::id();
 
         $classroom->classworks()->create($validatedData);
+
+        Notification::send($classroom,new NewClassroomNotification($classroom));
 
         return redirect()->route('classrooms.classworks.index', $classroom->id)
             ->with('success', 'Classwork Created Successfully.');

@@ -1,15 +1,13 @@
-@extends('layouts.master')
+<x-main-layout title="Classroom-index">
 
-@section('content')
     <div class="container" style="padding: 20px;">
 
-        <h1 class="mt-4 mb-5">Topics List</h1>
-
+        <h1 class="mt-4 mb-5">Trashed Topics</h1>
+        <x-alert name="success" id="success" class="alert-success"/>
         <div class="mb-5">
             <a href="{{route('topics.index')}}" class="btn btn-primary">All Topics</a>
         </div>
 
-        <x-alert/>
 
         <div class="row">
             @foreach($topics as $topic)
@@ -20,19 +18,19 @@
 
                             <div class="form-group">
 
-                            <a href="{{route('topics.show',$topic->id)}}"
-                               class="btn btn-secondary mt-4">Show</a>
-                            <form method="post" action="{{route('topics.restore',$topic->id)}}" >
-                                @csrf
-                                @method('PUT')
-                                <button type="submit" class="btn btn-success">Restore</button>
-                            </form>
+                                <a href="{{route('topics.show',$topic->id)}}"
+                                   class="btn btn-secondary mt-4">Show</a>
+                                <form method="post" action="{{route('topics.restore',$topic->id)}}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-success">Restore</button>
+                                </form>
 
-                            <a href="javascript:void(0)"
-                               onclick="delete_item({{$topic->id}})"
-                               data-bs-toggle="modal" data-bs-target="#delete_modal"
-                               class="btn btn-danger mt-4">
-                                delete </a>
+                                <a href="javascript:void(0)"
+                                   onclick="delete_item({{$topic->id}})"
+                                   data-bs-toggle="modal" data-bs-target="#delete_modal"
+                                   class="btn btn-danger mt-4">
+                                    delete </a>
 
                             </div>
                         </div>
@@ -72,14 +70,12 @@
         </div>
     </div>
 
+    <script>
+        function delete_item(id) {
+            $('#topic_id').val(id);
+            var url = "{{url('/topics/trashed')}}/" + id;
+            $('#delete_form').attr('action', url);
+        }
+    </script>
 
-
-@endsection
-<script>
-    function delete_item(id) {
-        $('#topic_id').val(id);
-        var url = "{{url('/topics/trashed')}}/" + id;
-        $('#delete_form').attr('action', url);
-    }
-</script>
-
+</x-main-layout>

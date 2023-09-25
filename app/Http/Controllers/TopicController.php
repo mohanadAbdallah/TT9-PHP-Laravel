@@ -25,7 +25,7 @@ class TopicController extends Controller
     public function store(TopicRequest $request): RedirectResponse
     {
         Topic::create($request->validated());
-        return redirect()->route('topics.index')->with('status','Topic Created Successfully');
+        return redirect()->route('topics.index')->with('success','Topic Created Successfully');
     }
 
     public function show($id): View

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClassroomRequest;
 use App\Models\Classroom;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ClassroomsController extends Controller
@@ -37,7 +36,7 @@ class ClassroomsController extends Controller
         if ($request->hasFile('cover_image')){
 
             $file = $request->file('cover_image');
-            $path = $file->store('/images','public');
+            $path = $file->store('images','public');
 
             $validatedData['cover_image_path'] = $path;
         }
@@ -67,16 +66,9 @@ class ClassroomsController extends Controller
 
     public function destroy(Classroom $classroom)
     {
-//        $image_path = public_path("storage/".$classroom->cover_image_path);
-//
-//        if(file_exists($image_path)){
-//            unlink($image_path);
-//        }
-        $deleted = $classroom->delete();
+        $classroom->delete();
 
-        return response()->json(
-                ['message'=>$deleted ? "Classroom Deleted" : "Failed To Delete Classroom"],
-                $deleted ? 201 : 400);
+        return redirect()->route('classrooms.index')->with('success','Classroom Deleted successfully');
     }
 
     public function trashed(): View

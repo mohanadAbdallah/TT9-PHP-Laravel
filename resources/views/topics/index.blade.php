@@ -1,9 +1,9 @@
-@extends('layouts.master')
+<x-main-layout title="Classroom-index">
 
-@section('content')
     <div class="container" style="padding: 20px;">
 
         <h1 class="mt-4 mb-5">Topics List</h1>
+        <x-alert name="success" id="success" class="alert-success"/>
 
         <div class="mb-5">
             <a href="{{route('topics.create')}}" class="btn btn-primary">Add Topic</a>
@@ -13,9 +13,6 @@
             <a href="{{route('topics.trashed')}}" class="btn btn-success">Trashed</a>
         </div>
 
-
-
-        <x-alert/>
 
         <div class="row">
             @foreach($topics as $topic)
@@ -59,7 +56,7 @@
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Confirm delete classroom.</p>
+                        <p>Confirm delete topic.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -70,14 +67,12 @@
         </div>
     </div>
 
+    <script>
+        function delete_item(id) {
+            $('#topic_id').val(id);
+            var url = "{{url('topics')}}/" + id;
+            $('#delete_form').attr('action', url);
+        }
+    </script>
 
-
-@endsection
-<script>
-    function delete_item(id) {
-        $('#topic_id').val(id);
-        var url = "{{url('topics')}}/" + id;
-        $('#delete_form').attr('action', url);
-    }
-</script>
-
+</x-main-layout>

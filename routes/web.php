@@ -19,13 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::middleware(['auth','verified'])->group(function () {
+Route::get('users',[\App\Http\Controllers\AuthController::class,'users'])->name('users.show');
 
-    Route::resources([
-        'topics' => TopicController::class,
-        'classrooms'=>ClassroomsController::class,
-        'classrooms.classworks'=>ClassworkController::class
-    ]);
+Route::middleware(['auth','verified'])->group(function () {
 
     Route::prefix('/classrooms/trashed')
         ->as('classrooms.')
@@ -44,6 +40,14 @@ Route::middleware(['auth','verified'])->group(function () {
             Route::put('/{topic}', 'restore')->name('restore');
             Route::delete('/{topic}', 'forceDelete')->name('force-delete');
         });
+
+    Route::resources([
+        'topics' => TopicController::class,
+        'classrooms'=>ClassroomsController::class,
+        'classrooms.classworks'=>ClassworkController::class
+    ]);
+
+
 
     Route::get('/dashboard', function () {
         return view('dashboard');

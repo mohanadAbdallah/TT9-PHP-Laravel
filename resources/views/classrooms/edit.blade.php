@@ -1,6 +1,6 @@
-@extends('layouts.master')
-@section('content')
-    <div class="container" style="padding: 20px;">
+<x-main-layout title="Classroom-index">
+
+<div class="container" style="padding: 20px;">
         <h1 class="mt-4 mb-5">Create Classroom</h1>
 
         <form action="{{ route('classrooms.update',$classroom->id)}}" method="post">
@@ -35,4 +35,4 @@
             <button type="submit" class="btn btn-primary">Update Classroom</button>
         </form>
     </div>
-@endsection
+</x-main-layout>

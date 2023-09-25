@@ -3,25 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Traits\AuthTrait;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Pipeline;
+
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request)
+    use AuthTrait;
+    public function register(RegisterRequest $request): \Illuminate\Http\RedirectResponse
     {
         User::create($request->validated());
         return redirect()->route('/');
     }
 
+    public function users(Request $request)
+    {
+        $pipelines = [
+            \App\Filters\ByEmail::class
+        ];
 
-    public function login(Request $request)
+        return Pipeline::send(User::query())
+            ->through($pipelines)
+            ->thenReturn()
+            ->paginate();
+    }
+
+    public function login(Request $request): \Illuminate\Foundation\Application|\Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
         $validation = $request->validate([
-            'email'=>'required,email',
-            'password'=>'required',
+            'email' => 'required,email',
+            'password' => 'required',
         ]);
 
         $user = User::where('email', $validation['email'])->first();
@@ -32,9 +52,11 @@ class AuthController extends Controller
 
         return redirect('/');
     }
-    public function logout()
+
+    public function logout(): RedirectResponse
     {
-        Auth::logout();
-        return redirect('/');
+        Auth::guard($this->checkGuard(request()))->logout();
+
+        return redirect($this->redirect(request()));
     }
 }

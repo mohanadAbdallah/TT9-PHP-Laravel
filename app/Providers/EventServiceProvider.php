@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\ClassroomCreated;
 use App\Models\Classroom;
 use App\Observers\ClassroomObserver;
 use Illuminate\Auth\Events\Registered;
@@ -20,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        ClassroomCreated::class => [
+
+        ]
     ];
     protected $observers = [
         Classroom::class => [

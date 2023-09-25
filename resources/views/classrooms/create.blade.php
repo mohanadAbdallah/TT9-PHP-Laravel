@@ -10,7 +10,7 @@
                 <x-slot:label>
                     <label for="name">Classroom Name</label>
                 </x-slot:label>
-                <x-form.input name="name" value="{{$classroom->name}}" placeholder="Classroom Name" />
+                <x-form.input name="name" value="{{$classroom->name}}" placeholder="Classroom Name"/>
             </x-form.floating-control>
 
             <x-form.floating-control name="subject">

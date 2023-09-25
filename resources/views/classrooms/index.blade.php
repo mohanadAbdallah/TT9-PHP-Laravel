@@ -17,7 +17,7 @@
             @foreach($classrooms as $classroom)
                 <div class="col-md-4 mb-4 " id="classroom_{{$classroom->id}}" style="display: block">
                     <div class="card" style="width: 18rem;">
-                        <img src="/{{$classroom->cover_image_path}}" class="card-img" width="50px;" height="150">
+                        <img src="/storage/{{$classroom->cover_image_path}}" class="card-img" width="50px;" height="150">
                         <div class="card-body">
                             <h5 class="card-title">{{$classroom->name}}</h5>
                             <p class="card-text">{{$classroom->subject}}</p>
@@ -28,6 +28,7 @@
 
                             <a href="javascript:void(0)"
                                onclick="delete_item({{$classroom->id}})"
+                               data-bs-toggle="modal" data-bs-target="#delete_modal"
                                class="btn btn-danger mt-4">
                                 delete </a>
                         </div>
@@ -40,25 +41,39 @@
         </ul>
 
     </div>
+
+    <div class="modal fade" id="delete_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="delete_form" method="post" action="">
+                    @csrf
+                    @method('Delete')
+                    <input name="id" id="classroom_id" class="form-control" type="hidden">
+                    <input name="_method" type="hidden" value="DELETE">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Confirm delete classroom.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 
     <script>
         function delete_item(id) {
-
             $('#classroom_id').val(id);
 
-            axios.delete('classrooms/' + id)
-
-                .then(function (responce) {
-                    console.log(responce);
-                    document.getElementById(`category_${id}`).style.display = "none";
-                })
-                .catch(function (error) {
-
-                })
-
-            {{--var url = "{{url('classrooms')}}/" + id;--}}
-            {{--$('#delete_form').attr('action', url);--}}
+            var url = "{{url('classrooms')}}/" + id;
+            $('#delete_form').attr('action', url);
         }
     </script>
 

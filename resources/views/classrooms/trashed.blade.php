@@ -1,9 +1,8 @@
-@extends('layouts.master')
+<x-main-layout title="Classroom-index">
 
-@section('content')
     <div class="container" style="padding: 20px;">
-        <h1 class="mt-4 mb-5">Classrooms List</h1>
-
+        <h1 class="mt-4 mb-5">Trashed Classrooms</h1>
+        <x-alert name="success" id="success" class="alert-success"/>
         <div class="mb-5">
             <a href="{{route('classrooms.index')}}" class="btn btn-primary">All Classrooms</a>
         </div>
@@ -69,13 +68,12 @@
     </div>
 
 
+    <script>
+        function delete_item(id) {
+            $('#classroom_id').val(id);
+            var url = "{{url('classrooms')}}/" + id;
+            $('#delete_form').attr('action', url);
+        }
+    </script>
 
-@endsection
-<script>
-    function delete_item(id) {
-        $('#classroom_id').val(id);
-        var url = "{{url('classrooms')}}/" + id;
-        $('#delete_form').attr('action', url);
-    }
-</script>
-
+</x-main-layout>

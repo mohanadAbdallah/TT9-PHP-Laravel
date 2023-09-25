@@ -1,8 +1,8 @@
-@extends('layouts.master')
-@section('content')
-    <div class="container" style="padding: 20px;">
+<x-main-layout title="Classroom-index">
 
-        <x-validation/>
+<div class="container" style="padding: 20px;">
+
+    <x-validation/>
 
         <h1 class="mt-4 mb-5">Create Topic</h1>
 
@@ -26,4 +26,5 @@
             <button type="submit" class="btn btn-primary">Create Topic</button>
         </form>
     </div>
-@endsection
+
+</x-main-layout>
